@@ -1,3 +1,252 @@
+DROP TABLE IF EXISTS movies;
+DROP TABLE IF EXISTS actors;
+DROP TABLE IF EXISTS appears_in;
+
+CREATE TABLE movies(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    release_year INTEGER,
+    mpaa_rating TEXT,
+    studio TEXT
+);
+
+CREATE TABLE actors(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT
+);
+
+CREATE TABLE appears_in(
+    actor_id INTEGER,
+    character TEXT,
+    movie_id INTEGER,
+    FOREIGN KEY (actor_id) REFERENCES actors(id),
+    FOREIGN KEY (movie_id) REFERENCES movies(id)
+);
+
+INSERT INTO movies (
+    title,
+    release_year,
+    mpaa_rating,
+    studio
+) VALUES (
+    "Batman Begins",
+    2005,
+    "PG-13",
+    "Warner Bros."
+);
+
+INSERT INTO movies (
+    title,
+    release_year,
+    mpaa_rating,
+    studio
+) VALUES (
+    "The Dark Knight",
+    2008,
+    "PG-13",
+    "Warner Bros."
+);
+
+INSERT INTO movies (
+    title,
+    release_year,
+    mpaa_rating,
+    studio
+) VALUES (
+    "The Dark Knight Rises",
+    2012,
+    "PG-13",
+    "Warner Bros."
+);
+
+INSERT INTO actors (
+    name
+) VALUES 
+("Christian Bale"),
+("Michael Caine"),
+("Liam Neeson"),
+("Katie Holmes"),
+("Gary Oldman"),
+("Heath Ledger"),
+("Aaron Eckhart"),
+("Maggie Gyllenhaal"),
+("Tom Hardy"),
+("Joseph Gordon-Levitt"),
+("Anne Hathaway");
+
+INSERT INTO appears_in
+(
+    actor_id,
+    movie_id,
+    character
+) VALUES(
+    (SELECT id From actors where name = "Christian Bale"),
+    (SELECT id From movies where title = "Batman Begins"),
+    "Bruce Wayne"
+);
+INSERT INTO appears_in
+(
+    actor_id,
+    movie_id,
+    character
+) VALUES(
+    (SELECT id From actors where name = "Christian Bale"),
+    (SELECT id From movies where title = "The Dark Knight"),
+    "Bruce Wayne"
+);
+INSERT INTO appears_in
+(
+    actor_id,
+    movie_id,
+    character
+) VALUES(
+    (SELECT id From actors where name = "Christian Bale"),
+    (SELECT id From movies where title = "The Dark Knight Rises"),
+    "Bruce Wayne"
+);
+
+INSERT INTO appears_in
+(
+    actor_id,
+    movie_id,
+    character
+) VALUES(
+    (SELECT id From actors where name = "Michael Caine"),
+    (SELECT id From movies where title = "Batman Begins"),
+    "Alfred"
+);
+
+INSERT INTO appears_in
+(
+    actor_id,
+    movie_id,
+    character
+) VALUES(
+    (SELECT id From actors where name = "Michael Caine"),
+    (SELECT id From movies where title = "The Dark Knight"),
+    "Alfred"
+);
+
+INSERT INTO appears_in
+(
+    actor_id,
+    movie_id,
+    character
+) VALUES(
+    (SELECT id From actors where name = "Michael Caine"),
+    (SELECT id From movies where title = "The Dark Knight Rises"),
+    "Alfred"
+);
+
+INSERT INTO appears_in
+(
+    actor_id,
+    movie_id,
+    character
+) VALUES(
+    (SELECT id From actors where name = "Liam Neeson"),
+    (SELECT id From movies where title = "Batman Begins"),
+    "Ra's Al Ghul"
+);
+
+INSERT INTO appears_in
+(
+    actor_id,
+    movie_id,
+    character
+) VALUES(
+    (SELECT id From actors where name = "Katie Holmes"),
+    (SELECT id From movies where title = "Batman Begins"),
+    "Rachel Dawes"
+);
+
+INSERT INTO appears_in
+(
+    actor_id,
+    movie_id,
+    character
+) VALUES(
+    (SELECT id From actors where name = "Gary Oldman"),
+    (SELECT id From movies where title = "Batman Begins"),
+    "Comissioner Gordon"
+);
+
+INSERT INTO appears_in
+(
+    actor_id,
+    movie_id,
+    character
+) VALUES(
+    (SELECT id From actors where name = "Gary Oldman"),
+    (SELECT id From movies where title = "The Dark Knight Rises"),
+    "Comissioner Gordon"
+);
+
+INSERT INTO appears_in
+(
+    actor_id,
+    movie_id,
+    character
+) VALUES(
+    (SELECT id From actors where name = "Heath Ledger"),
+    (SELECT id From movies where title = "The Dark Knight"),
+    "Joker"
+);
+
+INSERT INTO appears_in
+(
+    actor_id,
+    movie_id,
+    character
+) VALUES(
+    (SELECT id From actors where name = "Aaron Eckhart"),
+    (SELECT id From movies where title = "The Dark Knight"),
+    "Harvey Dent"
+);
+
+INSERT INTO appears_in
+(
+    actor_id,
+    movie_id,
+    character
+) VALUES(
+    (SELECT id From actors where name = "Maggie Gyllenhaal"),
+    (SELECT id From movies where title = "The Dark Knight"),
+    "Rachel Dawes"
+);
+
+INSERT INTO appears_in
+(
+    actor_id,
+    movie_id,
+    character
+) VALUES(
+    (SELECT id From actors where name = "Tom Hardy"),
+    (SELECT id From movies where title = "The Dark Knight Rises"),
+    "Bane"
+);
+
+INSERT INTO appears_in
+(
+    actor_id,
+    movie_id,
+    character
+) VALUES(
+    (SELECT id From actors where name = "Joseph Gordon-Levitt"),
+    (SELECT id From movies where title = "The Dark Knight Rises"),
+    "John Blake"
+);
+
+INSERT INTO appears_in
+(
+    actor_id,
+    movie_id,
+    character
+) VALUES(
+    (SELECT id From actors where name = "Anne Hathaway"),
+    (SELECT id From movies where title = "The Dark Knight Rises"),
+    "Selina Kyle"
+);
 -- In this assignment, you'll be building the domain model, database 
 -- structure, and data for "KMDB" (the Kellogg Movie Database).
 -- The end product will be a report that prints the movies and the 
@@ -112,6 +361,7 @@
 -- Prints a header for the movies output
 .print "Movies"
 .print "======"
+SELECT title, release_year, mpaa_rating, studio FROM movies;
 .print ""
 
 -- The SQL statement for the movies output
@@ -122,6 +372,11 @@
 .print "Top Cast"
 .print "========"
 .print ""
+SELECT movies.title, actors.name,character 
+    FROM appears_in 
+    INNER JOIN movies ON movie_id = movies.id 
+    INNER JOIN actors ON actor_id = actors.id
+    ORDER BY movies.title; 
 
 
 -- The SQL statement for the cast output
